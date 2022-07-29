@@ -1,9 +1,5 @@
-using System.Reflection;
-using MessagingSample.Shared.Constants;
-using MessagingSample.Shared.Extensions;
-using MessagingSample.Shared.Intefaces;
-using Rebus.Config;
-using Rebus.Serialization.Json;
+using MassTransit;
+using MessagingSample.ServiceBus.Handlers;
 using Serilog;
 using ILogger = Serilog.ILogger;
 
@@ -16,33 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Services.AddSingleton<ILogger>(_ => logger);
 
-builder.Services.AddRebus(configuration =>
+
+builder.Services.AddMassTransit(config =>
+{
+    config.AddConsumer<HelloWorldCommandHandler>();
+    
+    config.UsingRabbitMq((_, context) =>
     {
-        configuration.Transport(transport =>
-        {
-            transport.UseRabbitMq(builder.Configuration.GetConnectionString("RabbitMq"),
-                QueueNames.ConsumerQueueName);
-        });
-
-        configuration.Logging(logging => logging.Serilog(logger));
-        
-        configuration.Serialization(serializer => serializer.UseSystemJson());
-
-        configuration.Options(options =>
-        {
-            options.UseSimpleTopicName();
-            options.UseCustomSerializer(Assembly.GetExecutingAssembly().GetTypes());
-        });
-
-        return configuration;
-    },
-    onCreated: async bus =>
-    {
-        await bus.MapCommandsAsync<ICommandHandler>(async type => await bus.Subscribe(type));
-    }
-);
-
-builder.Services.AutoRegisterHandlersFromAssembly(typeof(Program).Assembly);
+        context.Host(new Uri(builder.Configuration.GetConnectionString("RabbitMq")));
+    }); 
+});
 
 var app = builder.Build();
 

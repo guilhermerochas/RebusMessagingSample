@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rebus" Version="6.6.5" />
-    <PackageReference Include="Rebus.RabbitMq" Version="7.3.5" />
-    <PackageReference Include="Rebus.Serilog" Version="7.0.0" />
-    <PackageReference Include="Rebus.ServiceProvider" Version="8.0.0" />
+    <PackageReference Include="MassTransit" Version="8.0.5" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.5" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
@@ -18,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MessagingSample.Shared\MessagingSample.Shared.csproj" />
+    <ProjectReference Include="..\MessagingSample.ServiceBus\MessagingSample.ServiceBus.csproj" />
   </ItemGroup>
 
 </Project>

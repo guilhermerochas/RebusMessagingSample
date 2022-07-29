@@ -1,4 +1,4 @@
-﻿namespace MessagingSample.Producer.Commands;
+﻿namespace MessagingSample.ServiceBus.Commands;
 
 public class HelloWorldCommand
 {
